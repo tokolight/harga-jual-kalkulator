@@ -14,14 +14,20 @@ function App() {
       ? hpp * 0.015
       : 1000;
 
+  const admin = hpp * 0.08;
+  const ongkir = hpp * 0.05;
+  const promo = hpp * 0.02;
+  const tambahanLain = biayaLain ? hpp * 0.05 : 0;
+
   const biayaPlatform = mode === "online"
-    ? hpp * 0.08 + hpp * 0.05 + hpp * 0.02 +
+    ? admin + ongkir + promo +
       (asuransi ? 350 : 0) +
       (proses ? 1250 : 0) +
-      (biayaLain ? hpp * 0.05 : 0)
+      tambahanLain
     : 0;
 
-  const hargaJual = hpp + biayaPacking + biayaPlatform + hpp * (margin / 100);
+  const totalMargin = hpp * (margin / 100);
+  const hargaJual = hpp + biayaPacking + biayaPlatform + totalMargin;
 
   return (
     <div style={{
@@ -32,7 +38,7 @@ function App() {
       color: '#2c3e50',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'flex-start'
     }}>
       <div style={{
         width: '100%',
@@ -128,6 +134,31 @@ function App() {
           fontWeight: 700
         }}>
           Harga Jual: Rp {Math.ceil(hargaJual).toLocaleString('id-ID')}
+        </div>
+
+        <div style={{
+          marginTop: '25px',
+          fontSize: '0.95rem',
+          lineHeight: '1.6',
+          background: '#f1f5f9',
+          borderRadius: '12px',
+          padding: '20px',
+          color: '#334155'
+        }}>
+          <strong>Rincian Biaya:</strong><br />
+          - HPP: Rp {hpp.toLocaleString('id-ID')}<br />
+          - Biaya Packing: Rp {Math.ceil(biayaPacking).toLocaleString('id-ID')}<br />
+          - Margin ({margin}%): Rp {totalMargin.toLocaleString('id-ID')}<br />
+          {mode === "online" && (
+            <>
+              - Admin (8%): Rp {admin.toLocaleString('id-ID')}<br />
+              - Gratis Ongkir XTRA (5%): Rp {ongkir.toLocaleString('id-ID')}<br />
+              - Promo XTRA (2%): Rp {promo.toLocaleString('id-ID')}<br />
+              {asuransi && <>- Asuransi: Rp 350<br /></>}
+              {proses && <>- Proses Pesanan: Rp 1.250<br /></>}
+              {biayaLain && <>- Biaya Lain (5%): Rp {tambahanLain.toLocaleString('id-ID')}<br /></>}
+            </>
+          )}
         </div>
       </div>
     </div>
